@@ -1,0 +1,25 @@
+﻿@using BlazorApp.Shared
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">PK</th>
+      <th scope="col">Name</th>
+      <th scope="col">Add Date</th>
+    </tr>
+  </thead>
+  <tbody>
+      @foreach (var item in XDataTable.Data)
+      {
+          <tr>
+              <td>@item.PK</td>
+              <td>@item.Name</td>
+              <td>@item.AddDate</td>
+          </tr>
+      }
+  </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public XDataTable<DemoModel> XDataTable { get; set; }
+}

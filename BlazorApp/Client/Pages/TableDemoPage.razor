@@ -1,0 +1,52 @@
+﻿@page "/TableDemoPage"
+@using BlazorApp.Shared;
+<h3>TableDemo</h3>
+<BlazorApp.Client.Component.Module.DemoTable XDataTable="PageModule.XDataTable"></BlazorApp.Client.Component.Module.DemoTable>
+<BlazorApp.Client.Component.Module.PageBar PageInfo="PageModule.PageInfo"></BlazorApp.Client.Component.Module.PageBar>
+
+@code {
+    PageModuleModel<DemoModel> PageModule;
+
+    protected override void OnInitialized()
+    {
+        PageModule = new PageModuleModel<DemoModel>()
+        {
+            PageInfo = new PageInfo()
+            {
+                PageSize = 10,
+                CurrentPage = 1,
+                PageCount = 20,
+                TotalCount = 200
+            },
+            XDataTable = new XDataTable<DemoModel>()
+        };
+
+        PageModule.XDataTable.Data = new List<DemoModel>();
+        for (int i = 0; i < PageModule.PageInfo.PageSize; i++)
+        {
+            PageModule.XDataTable.Data.Add(new DemoModel()
+            {
+                Name = "New Data " + i,
+                AddDate = DateTime.Now.AddMinutes(i),
+                PK = Guid.NewGuid()
+            });
+        }
+
+        PageModule.PageInfo.NaviToPage = (page) =>
+        {
+            PageModule.XDataTable.Data = new List<DemoModel>();
+            Console.WriteLine(page);
+            for (int i = 0; i < PageModule.PageInfo.PageSize; i++)
+            {
+                PageModule.XDataTable.Data.Add(new DemoModel()
+                {
+                    Name = "New Data " + i,
+                    AddDate = DateTime.Now.AddMinutes(i),
+                    PK = Guid.NewGuid()
+                });
+            }
+
+            this.StateHasChanged();
+        };
+    }
+}

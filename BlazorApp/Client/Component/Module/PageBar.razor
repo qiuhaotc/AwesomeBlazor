@@ -1,0 +1,52 @@
+﻿@using BlazorApp.Shared
+
+@for (int i = 1; i <= PageInfo.PageCount; i++)
+{
+    var showButton = true;
+
+
+    if (i != 1 && i != PageInfo.PageCount && i != PageInfo.CurrentPage && (i > PageInfo.CurrentPage + PageInfo.RightButtonShowCount || i < PageInfo.CurrentPage - PageInfo.LeftButtonShowCount))
+    {
+        if(i == PageInfo.CurrentPage + PageInfo.RightButtonShowCount + 1)
+        {
+            <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(PageInfo.PageCount))">@(">>")</button>
+        }
+        else if(i == PageInfo.CurrentPage - PageInfo.LeftButtonShowCount - 1)
+        {
+            <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(1))">@("<<")</button>
+        }
+
+        showButton = false;
+    }
+
+    if (showButton)
+    {
+        int page = i;
+        var buttonClass = "";
+        if (i == PageInfo.CurrentPage)
+        {
+            buttonClass = "disabled";
+        }
+        <button type="button" class="btn btn-light @buttonClass btn-sm" @onclick="(() => NaviTo(page))">@GetFixedNumber(i, PageInfo.PageCount)</button>
+    }
+}
+
+@{
+    Console.WriteLine(PageInfo.ToString());
+}
+
+@code {
+    [Parameter]
+    public PageInfo PageInfo { get; set; }
+
+    void NaviTo(int toPage)
+    {
+        PageInfo.NaviToPage?.Invoke(toPage);
+        PageInfo.CurrentPage = toPage;
+    }
+
+    string GetFixedNumber(int page, int totalPage)
+    {
+        return page.ToString().PadLeft( totalPage.ToString().Length, '0');
+    }
+}
