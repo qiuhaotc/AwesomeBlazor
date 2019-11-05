@@ -1,0 +1,28 @@
+﻿@using BlazorApp.Shared
+@typeparam ModelType
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            @foreach (var columnHeader in XDataTable.Columns)
+            {
+                <th scope="col">@columnHeader</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in XDataTable.Rows)
+        {
+            <tr>
+                @foreach (var columnValue in item.Values)
+                {
+                    <td>@columnValue</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public XDataTable<ModelType> XDataTable { get; set; }
+}

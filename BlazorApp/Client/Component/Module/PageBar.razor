@@ -1,34 +1,24 @@
 ﻿@using BlazorApp.Shared
 
-@for (int i = 1; i <= PageInfo.PageCount; i++)
+@if (PageInfo.PageCount > PageInfo.PageSize)
 {
-    var showButton = true;
+    <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(1))">@("<<")</button>
+}
 
-
-    if (i != 1 && i != PageInfo.PageCount && i != PageInfo.CurrentPage && (i > PageInfo.CurrentPage + PageInfo.RightButtonShowCount || i < PageInfo.CurrentPage - PageInfo.LeftButtonShowCount))
+@for (int i = PageInfo.LeftStartPage; i <= PageInfo.RightEndPage; i++)
+{
+    int page = i;
+    var buttonClass = "";
+    if (i == PageInfo.CurrentPage)
     {
-        if(i == PageInfo.CurrentPage + PageInfo.RightButtonShowCount + 1)
-        {
-            <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(PageInfo.PageCount))">@(">>")</button>
-        }
-        else if(i == PageInfo.CurrentPage - PageInfo.LeftButtonShowCount - 1)
-        {
-            <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(1))">@("<<")</button>
-        }
-
-        showButton = false;
+        buttonClass = "disabled";
     }
+    <button type="button" class="btn btn-light @buttonClass btn-sm" @onclick="(() => NaviTo(page))">@GetFixedNumber(i, PageInfo.PageCount)</button>
+}
 
-    if (showButton)
-    {
-        int page = i;
-        var buttonClass = "";
-        if (i == PageInfo.CurrentPage)
-        {
-            buttonClass = "disabled";
-        }
-        <button type="button" class="btn btn-light @buttonClass btn-sm" @onclick="(() => NaviTo(page))">@GetFixedNumber(i, PageInfo.PageCount)</button>
-    }
+@if (PageInfo.PageCount > PageInfo.PageSize)
+{
+    <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(PageInfo.PageCount))">@(">>")</button>
 }
 
 @{
@@ -41,12 +31,15 @@
 
     void NaviTo(int toPage)
     {
-        PageInfo.NaviToPage?.Invoke(toPage);
-        PageInfo.CurrentPage = toPage;
+        if (toPage != PageInfo.CurrentPage)
+        {
+            PageInfo.NaviToPage?.Invoke(toPage);
+            PageInfo.CurrentPage = toPage;
+        }
     }
 
     string GetFixedNumber(int page, int totalPage)
     {
-        return page.ToString().PadLeft( totalPage.ToString().Length, '0');
+        return page.ToString().PadLeft(totalPage.ToString().Length, '0');
     }
 }

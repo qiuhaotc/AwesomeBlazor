@@ -34,10 +34,12 @@ namespace BlazorApp.Shared
         public int PageOffset => ShowPagesButtonCount / 2;
         public int LeftButtonShowCount { get; set; }
         public int RightButtonShowCount { get; set; }
+        public int LeftStartPage { get; set; }
+        public int RightEndPage { get; set; }
 
         public override string ToString()
         {
-            return $"ShowPagesButtonCount {ShowPagesButtonCount} LeftButtonShowCount {LeftButtonShowCount} RightButtonShowCount {RightButtonShowCount} PageOffset {PageOffset} CurrentPage {CurrentPage}";
+            return $"ShowPagesButtonCount {ShowPagesButtonCount} LeftButtonShowCount {LeftButtonShowCount} RightButtonShowCount {RightButtonShowCount} PageOffset {PageOffset} CurrentPage {CurrentPage} LeftStartPage {LeftStartPage} RightEndPage {RightEndPage}";
         }
 
         void SetButtonsValue()
@@ -49,13 +51,16 @@ namespace BlazorApp.Shared
             }
             else if(PageCount - CurrentPage - 1 < PageOffset)
             {
-                RightButtonShowCount = PageCount - CurrentPage - 1;
+                RightButtonShowCount = PageCount - CurrentPage;
                 LeftButtonShowCount = ShowPagesButtonCount - RightButtonShowCount;
             }
             else
             {
                 LeftButtonShowCount = RightButtonShowCount = PageOffset;
             }
+
+            LeftStartPage = CurrentPage - LeftButtonShowCount;
+            RightEndPage = currentPage + RightButtonShowCount;
         }
     }
 }
