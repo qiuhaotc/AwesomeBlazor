@@ -1,4 +1,5 @@
 ﻿@using BlazorApp.Shared
+@typeparam ModelType
 
 @if (PageInfo.PageCount > PageInfo.PageSize)
 {
@@ -21,21 +22,13 @@
     <button type="button" class="btn btn-light btn-sm" @onclick="(() => NaviTo(PageInfo.PageCount))">@(">>")</button>
 }
 
-@{
-    Console.WriteLine(PageInfo.ToString());
-}
-
 @code {
     [Parameter]
-    public PageInfo PageInfo { get; set; }
+    public XPageInfo<ModelType> PageInfo { get; set; }
 
-    void NaviTo(int toPage)
+    async void NaviTo(int toPage)
     {
-        if (toPage != PageInfo.CurrentPage)
-        {
-            PageInfo.NaviToPage?.Invoke(toPage);
-            PageInfo.CurrentPage = toPage;
-        }
+        await PageInfo.NaviToPage(toPage);
     }
 
     string GetFixedNumber(int page, int totalPage)

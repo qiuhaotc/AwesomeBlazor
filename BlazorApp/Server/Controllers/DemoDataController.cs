@@ -15,14 +15,27 @@ namespace BlazorApp.Server.Controllers
         public List<DemoModel> GetDemoData(int page, int pageSize)
         {
             var data = new List<DemoModel>();
+            var nameFilter = Request.Query["Name"];
             for (var i = 0; i < pageSize; i++)
             {
-                data.Add(new DemoModel()
+                if(!string.IsNullOrEmpty(nameFilter))
                 {
-                    AddDate = DateTime.Now,
-                    Name = $"Demo Data: {pageSize} + {page} + {i}",
-                    PK = Guid.NewGuid()
-                });
+                    data.Add(new DemoModel()
+                    {
+                        AddDate = DateTime.Now,
+                        Name = $"Demo Data: {pageSize} + {page} + {i}, equal to {nameFilter}",
+                        PK = Guid.NewGuid()
+                    });
+                }
+                else
+                {
+                    data.Add(new DemoModel()
+                    {
+                        AddDate = DateTime.Now,
+                        Name = $"Demo Data: {pageSize} + {page} + {i}",
+                        PK = Guid.NewGuid()
+                    });
+                }
             }
 
             return data;

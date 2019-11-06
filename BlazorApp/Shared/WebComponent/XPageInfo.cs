@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace BlazorApp.Shared
 {
-    public class PageInfo
+    public class XPageInfo<T>
     {
+        public XPageInfo(PageModuleModel<T> parent)
+        {
+            this.parent = parent;
+        }
+
         int pageCount;
         int currentPage;
+        PageModuleModel<T> parent;
 
         public int PageCount
         {
@@ -29,7 +36,15 @@ namespace BlazorApp.Shared
         }
 
         public int TotalCount { get; set; }
-        public Action<int> NaviToPage { get; set; }
+        public async Task NaviToPage(int page)
+        {
+            if(page != CurrentPage)
+            {
+                CurrentPage = page;
+                await parent.RefreshData();
+            }
+        }
+
         public int ShowPagesButtonCount { get; set; } = 8;
         public int PageOffset => ShowPagesButtonCount / 2;
         public int LeftButtonShowCount { get; set; }

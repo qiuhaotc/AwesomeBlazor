@@ -10,13 +10,13 @@ namespace BlazorApp.Shared
     {
         List<T> data;
 
-        public List<string> Columns { get; set; }
+        public List<string> Columns { get; set; } = new List<string>();
         public List<T> Data
         {
             get => data;
         }
 
-        public List<XDataItem> Rows { get; set; }
+        public List<XDataItem> Rows { get; set; } = new List<XDataItem>();
         public List<PropertyInfo> ColumnPropertyInfos { get; set; }
         public void SetColumnsAndItems(List<T> data)
         {

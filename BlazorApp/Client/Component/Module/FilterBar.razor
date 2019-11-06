@@ -1,0 +1,19 @@
+﻿@foreach (var filter in XFilterBar.Filters)
+{
+    <div class="form-group row">
+        <label for="@filter.FilterName" class="col-sm-2 col-form-label">@filter.FilterName</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="@filter.FilterName" @bind-value="filter.FilterText" />
+        </div>
+    </div>
+}
+<div class="row">
+     <div class="col-sm-12"><button type="button" class="btn btn-primary float-right" @onclick="TriggerFilter">Search</button></div>
+</div>
+
+@code {
+    [Parameter]
+    public XFilterBar XFilterBar { get; set; }
+    [Parameter]
+    public Action TriggerFilter { get; set; }
+}

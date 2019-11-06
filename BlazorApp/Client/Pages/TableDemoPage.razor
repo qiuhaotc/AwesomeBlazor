@@ -1,50 +1,43 @@
 ﻿@page "/TableDemoPage"
 @using BlazorApp.Shared;
+@inject HttpClient Http
 <h3>TableDemo</h3>
-<BlazorApp.Client.Component.Module.DataTable XDataTable="PageModule.XDataTable"></BlazorApp.Client.Component.Module.DataTable>
-<BlazorApp.Client.Component.Module.PageBar PageInfo="PageModule.PageInfo"></BlazorApp.Client.Component.Module.PageBar>
+<BlazorApp.Client.Component.Module.TableControl PageModule="PageModule"></BlazorApp.Client.Component.Module.TableControl>
 
 @code {
     PageModuleModel<DemoModel> PageModule;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        PageModule = new PageModuleModel<DemoModel>()
+        PageModule = new PageModuleModel<DemoModel>(Http.BaseAddress.AbsoluteUri, () => this.StateHasChanged())
         {
-            PageInfo = new PageInfo()
+            DataTable = new XDataTable<DemoModel>(),
+            FilterBar = new XFilterBar()
             {
-                PageSize = 10,
-                CurrentPage = 1,
-                PageCount = 20,
-                TotalCount = 200
-            },
-            XDataTable = new XDataTable<DemoModel>()
+                Filters = new List<XFilter>()
+            {
+                    new XFilter()
+                    {
+                        FilterCode = "Name",
+                        FilterText = "",
+                        FilterName = "Full Name",
+                        FilterType = FilterType.TextFilter
+                    }
+                }
+            }
+        };
+
+        PageModule.PageInfo = new XPageInfo<DemoModel>(PageModule)
+        {
+            PageSize = 10,
+            CurrentPage = 1,
+            PageCount = 20,
+            TotalCount = 200
         };
 
         PageModule.GetDataUri = "api/demodata";
-        Console.WriteLine(PageModule.GetDataUri);
 
-        var data = new List<DemoModel>();
-        for (int i = 0; i < PageModule.PageInfo.PageSize; i++)
-        {
-            data.Add(new DemoModel()
-            {
-                Name = "New Data " + i,
-                AddDate = DateTime.Now.AddMinutes(i),
-                PK = Guid.NewGuid()
-            });
-        }
-
-        PageModule.XDataTable.SetColumnsAndItems(data);
-
-        PageModule.PageInfo.NaviToPage = async (page) =>
-        {
-            PageModule.PageInfo.CurrentPage = page;
-            var newPageData = await PageModule.GetDataAsync();
-            Console.WriteLine(page);
-
-            PageModule.XDataTable.SetColumnsAndItems(newPageData);
-            this.StateHasChanged();
-        };
+        var data = await PageModule.GetDataAsync();
+        PageModule.DataTable.SetColumnsAndItems(data);
     }
 }

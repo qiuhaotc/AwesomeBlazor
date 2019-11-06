@@ -1,0 +1,8 @@
+﻿@typeparam ModelType
+<BlazorApp.Client.Component.Module.FilterBar XFilterBar="PageModule.FilterBar" TriggerFilter="async () => await PageModule.RefreshData()"></BlazorApp.Client.Component.Module.FilterBar>
+<BlazorApp.Client.Component.Module.DataTable XDataTable="PageModule.DataTable"></BlazorApp.Client.Component.Module.DataTable>
+<BlazorApp.Client.Component.Module.PageBar PageInfo="PageModule.PageInfo"></BlazorApp.Client.Component.Module.PageBar>
+@code {
+    [Parameter]
+    public PageModuleModel<ModelType> PageModule { get; set; }
+}
