@@ -133,3 +133,8 @@ app {
         display: block;
     }
 }
+
+.vjs-normal{
+    width: 800px;
+    height: 450px;
+}

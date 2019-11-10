@@ -1,0 +1,15 @@
+﻿@page "/VideoDemoPage"
+<h3>VideoDemo</h3>
+<BlazorApp.Client.Component.Player.Video VideoSrcs="VideoSrcs"></BlazorApp.Client.Component.Player.Video>
+@code {
+    public (string Src, string Type)[] VideoSrcs { get; set; }
+
+    protected override void OnInitialized()
+    {
+        VideoSrcs = new (string, string)[] {
+            ("//vjs.zencdn.net/v/oceans.mp4","video/mp4"),
+            ("//vjs.zencdn.net/v/oceans.webm","video/webm"),
+            ("//vjs.zencdn.net/v/oceans.ogv","video/ogg")
+        };
+    }
+}
